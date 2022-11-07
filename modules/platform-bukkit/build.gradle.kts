@@ -21,7 +21,7 @@ barcodeTasks {
     bukkitResource {
         main = "com.vjh0107.barcode.framework.BarcodeFrameworkPlugin"
         name = "BarcodeFramework"
-        apiVersion = "1.18"
+        apiVersion = "1.19"
         author = "vjh0107"
         softDepend = listOf(
             "Vault",
@@ -41,9 +41,10 @@ dependencies {
     compileOnly(Deps.Minecraft.SPIGOT_REMAPPED)
     compileOnly(Deps.Library.NETTY)
     compileOnly(Deps.Minecraft.AUTH_LIB)
+    compileOnly(Deps.Minecraft.Plugin.VAULT)
+    compileOnly(Deps.Minecraft.Plugin.PAPI)
+
     implementation(Deps.Minecraft.Plugin.COMMAND_API)
-    implementation(Deps.Minecraft.Plugin.VAULT)
-    implementation(Deps.Minecraft.Plugin.PAPI)
     implementation(Deps.KotlinX.Coroutines.CORE)
     implementation(Deps.KotlinX.Serialization.JSON)
     implementationAll(Deps.Ktor.CLIENT)

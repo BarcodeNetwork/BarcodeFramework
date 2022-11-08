@@ -23,26 +23,20 @@ pluginManagement {
     }
 }
 
+file(rootProject.projectDir.path + "/publish.gradle.kts").let {
+    if (it.exists()) {
+        apply(it.path)
+    }
+}
+
+fun includeAll(modulesDir: String) {
+    file("${rootProject.projectDir.path}/${modulesDir.replace(":", "/")}/").listFiles()?.forEach { modulePath ->
+        include("${modulesDir.replace("/", ":")}:${modulePath.name}")
+    }
+}
+
+includeBuild("build-logic")
 includeBuild("plugins/project-manager")
 includeBuild("plugins/module-publisher")
-includeBuild("build-logic")
-include("modules:common")
-include("modules:koin")
-include("modules:platform-bukkit-common")
-include("modules:database")
-include("modules:google-sheets")
-include("modules:platform-bukkit-v1_19_R1")
-include("modules:platform-ktor")
-include("modules:platform-bukkit")
-//fun getAllProjects(path: String) {
-//    project(path).children.forEach {
-//        println(it.projectDir)
-//        println(it.parent?.name)
-//    }
-//}
-//
-//getAllProjects(":modules")
 
-//project(":modules").children.forEach { childProject ->
-//    childProject.name = "${rootProject.name.toLowerCase()}-${childProject.name}"
-//}
+includeAll("modules")

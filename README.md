@@ -10,7 +10,7 @@ BarcodeComponent를 통한 객체 생성은, Koin 어노테이션이 있을 경�
 
 MavenCentral 에 publish 되어 있습니다!
 
-```
+```kotlin
 repositories {
   mavenCentral()
 }

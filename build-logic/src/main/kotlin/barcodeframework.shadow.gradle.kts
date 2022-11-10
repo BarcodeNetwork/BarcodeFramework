@@ -8,7 +8,5 @@ plugins {
 
 tasks.shadowJar {
     setBuildOutputDir()
-    val localDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
     this.archiveBaseName.set("${project.rootProject.name}-${project.name}")
-    this.archiveClassifier.set(localDateTime)
 }

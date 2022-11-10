@@ -35,8 +35,9 @@ fun includeAll(modulesDir: String) {
     }
 }
 
-includeBuild("build-logic")
+
 includeBuild("plugins/project-manager")
 includeBuild("plugins/module-publisher")
+includeBuild("build-logic")
 
 includeAll("modules")

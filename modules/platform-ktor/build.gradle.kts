@@ -1,5 +1,6 @@
 plugins {
     id("barcodeframework.shared")
+    id("barcodeframework.shadow")
     id("barcodeframework.module-publisher")
     id("com.vjh0107.ksp-extension")
     kotlin("plugin.serialization")

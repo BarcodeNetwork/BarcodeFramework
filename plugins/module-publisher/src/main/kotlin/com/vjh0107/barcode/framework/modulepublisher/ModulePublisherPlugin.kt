@@ -21,6 +21,9 @@ class ModulePublisherPlugin : Plugin<Project> {
             val javadocJar by tasks.registering(Jar::class) {
                 archiveClassifier.set("javadoc")
             }
+            val sourcesJar by tasks.registering(Jar::class) {
+                archiveClassifier.set("sources")
+            }
             val publishConfig: PublishingExtension.() -> Unit = {
                 repositories {
                     maven {
@@ -35,6 +38,11 @@ class ModulePublisherPlugin : Plugin<Project> {
                 publications {
                     create<MavenPublication>("maven") {
                         artifact(javadocJar.get())
+                        artifact(sourcesJar.get())
+                        artifact(tasks.getByName("jar"))
+                        tasks.findByName("shadowJar")?.let {
+                            artifact(it)
+                        }
                         pom {
                             name.set(getExtra("publish.name"))
                             description.set(getExtra("publish.description"))
@@ -66,7 +74,6 @@ class ModulePublisherPlugin : Plugin<Project> {
                 val publications = extensions.getByType(PublishingExtension::class).publications
                 sign(publications)
             }
-
             extensions.configure<PublishingExtension>("publishing", publishConfig)
             extensions.configure("signing", signingConfig)
         }

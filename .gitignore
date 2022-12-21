@@ -7,3 +7,5 @@ publish.gradle.kts
 # build 를 패키지명으로 사용하지 마세요.
 build/
 **/build/
+
+test-bukkit

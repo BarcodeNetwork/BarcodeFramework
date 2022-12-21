@@ -36,7 +36,6 @@ class BarcodeRegistrableHandler<P: AbstractBarcodePlugin>(
                 }
                 registrableMap[registrable.id] = registrable
                 registerRegistrars(registrable)
-                plugin.logger.info("성공적으로 registrar ${registrable.id} 를(을) 등록하였습니다.")
             }
             forEach { registrable ->
                 registrable.load()

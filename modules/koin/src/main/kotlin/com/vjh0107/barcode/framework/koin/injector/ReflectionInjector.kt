@@ -22,9 +22,11 @@ object ReflectionInjector {
         val constructors = klass.constructors.first()
         val parameters = constructors.parameters.map { parameter ->
             val parameterKClass = parameter.type.classifier as KClass<*>
-
-            if (providedInstanceMap?.filter { (it.key::isSuperclassOf)(parameterKClass) }?.isNotEmpty() == true) {
-                return@map providedInstanceMap[parameterKClass]
+            if (providedInstanceMap != null) {
+                val providedInstance = providedInstanceMap.filter { parameterKClass.isSuperclassOf(it.key) }.values.first()
+                if (providedInstance != null) {
+                    return@map providedInstance
+                }
             }
 
             val qualifier = KoinAnnotationProcessor.getQualifier(parameter)

@@ -11,6 +11,7 @@ import io.ktor.server.routing.*
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler
 @Factory(binds = [AbstractKtorComponentHandler::class])
@@ -18,11 +19,8 @@ import kotlin.reflect.KClass
 class BarcodeRouterHandler<A : AbstractBarcodeApplication>(
     application: A
 ) : AbstractKtorComponentHandler<A, BarcodeRouter>(application) {
-
-    override fun processAnnotation(clazz: KClass<BarcodeRouter>) {
-        if (clazz.java.genericInterfaces.contains(BarcodeRouter::class.java)) {
-            registerComponent(clazz)
-        }
+    override fun validate(clazz: KClass<BarcodeRouter>): Boolean {
+        return clazz.isSubclassOf(BarcodeRouter::class)
     }
 
     override fun onPostEnable() {

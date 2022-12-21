@@ -9,6 +9,7 @@ import com.vjh0107.barcode.framework.koin.getKoin
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler(priority = HandlerPriority.PROVIDER)
 @Factory(binds = [AbstractBukkitComponentHandler::class])
@@ -17,11 +18,8 @@ class BarcodeKoinModuleHandler<P: AbstractBarcodePlugin>(
     plugin: P
 ) : AbstractBukkitComponentHandler<P, BarcodeKoinModule>(plugin) {
 
-    // TODO: clazz.java 를 코틀린 클래스로
-    override fun processAnnotation(clazz: KClass<BarcodeKoinModule>) {
-        if (clazz.java.genericInterfaces.contains(BarcodeKoinModule::class.java)) {
-            registerComponent(clazz)
-        }
+    override fun validate(clazz: KClass<BarcodeKoinModule>): Boolean {
+        return clazz.isSubclassOf(BarcodeKoinModule::class)
     }
 
     override fun onPostEnable() {

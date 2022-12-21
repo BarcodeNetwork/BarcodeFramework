@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler(priority = HandlerPriority.HIGH)
 @Factory(binds = [AbstractBukkitComponentHandler::class])
@@ -17,10 +18,8 @@ class BarcodeListenerHandler<P: AbstractBarcodePlugin>(
     plugin: P
 ) : AbstractBukkitComponentHandler<P, BarcodeListener>(plugin) {
 
-    override fun processAnnotation(clazz: KClass<BarcodeListener>) {
-        if (clazz.java.genericInterfaces.contains(BarcodeListener::class.java)) {
-            registerComponent(clazz)
-        }
+    override fun validate(clazz: KClass<BarcodeListener>): Boolean {
+        return clazz.isSubclassOf(BarcodeListener::class)
     }
 
     override fun onPostEnable() {

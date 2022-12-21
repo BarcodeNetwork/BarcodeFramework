@@ -1,7 +1,6 @@
 package com.vjh0107.barcode.framework.component.handler
 
 import com.vjh0107.barcode.framework.component.*
-import com.vjh0107.barcode.framework.component.defaultComponentOrder
 import com.vjh0107.barcode.framework.exceptions.ConstructorNotAllowedException
 import com.vjh0107.barcode.framework.utils.uncheckedCast
 import kotlin.jvm.internal.Reflection
@@ -58,9 +57,9 @@ abstract class AbstractComponentHandler<T : IBarcodeComponent> : ComponentHandle
     abstract fun findTargetClasses(): MutableSet<Class<*>>
 
     /**
-     * 어노테이션을 프로세싱하여 componentClasses 에 등록합니다.
+     * 컴포넌트 구현 규칙에 부합하는지 검증합니다.
      */
-    abstract fun processAnnotation(clazz: KClass<T>)
+    abstract fun validate(clazz: KClass<T>): Boolean
 
     /**
      * 컴포넌트 클래스를 인자로 받아 인스턴스를 생성합니다.
@@ -85,7 +84,9 @@ abstract class AbstractComponentHandler<T : IBarcodeComponent> : ComponentHandle
             for (annotation in clazz.annotations) {
                 if (annotation is BarcodeComponent) {
                     val klass = Reflection.createKotlinClass(clazz).uncheckedCast<KClass<T>>() ?: return@clazz
-                    processAnnotation(klass)
+                    if (validate(klass)) {
+                        registerComponent(klass)
+                    }
                 }
             }
         }

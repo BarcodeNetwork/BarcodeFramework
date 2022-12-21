@@ -10,6 +10,7 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler
 @Factory(binds = [AbstractBukkitComponentHandler::class])
@@ -19,10 +20,8 @@ class BarcodeRegistrableHandler<P: AbstractBarcodePlugin>(
 ) : AbstractBukkitComponentHandler<P, BarcodeRegistrable>(plugin) {
     private val registrableMap: MutableMap<String, BarcodeRegistrable> = mutableMapOf()
 
-    override fun processAnnotation(clazz: KClass<BarcodeRegistrable>) {
-        if (clazz.java.genericInterfaces.contains(BarcodeRegistrable::class.java)) {
-            registerComponent(clazz)
-        }
+    override fun validate(clazz: KClass<BarcodeRegistrable>): Boolean {
+        return clazz.isSubclassOf(BarcodeRegistrable::class)
     }
 
     override fun onPostEnable() {

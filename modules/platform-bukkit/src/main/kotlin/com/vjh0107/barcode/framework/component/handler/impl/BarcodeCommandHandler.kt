@@ -8,6 +8,7 @@ import dev.jorel.commandapi.CommandAPI
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler
 @Factory(binds = [AbstractBukkitComponentHandler::class])
@@ -16,10 +17,8 @@ class BarcodeCommandHandler<P: AbstractBarcodePlugin>(
     plugin: P
 ) : AbstractBukkitComponentHandler<P, BarcodeCommand>(plugin) {
 
-    override fun processAnnotation(clazz: KClass<BarcodeCommand>) {
-        if (clazz.java.genericInterfaces.contains(BarcodeCommand::class.java)) {
-            registerComponent(clazz)
-        }
+    override fun validate(clazz: KClass<BarcodeCommand>): Boolean {
+        return clazz.isSubclassOf(BarcodeCommand::class)
     }
 
     override fun onPostEnable() {

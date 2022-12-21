@@ -6,15 +6,14 @@ import com.vjh0107.barcode.framework.component.handler.AbstractBukkitComponentHa
 import com.vjh0107.barcode.framework.component.handler.BarcodeComponentHandler
 import com.vjh0107.barcode.framework.component.handler.HandlerPriority
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler(priority = HandlerPriority.REPOSITORY)
 class BarcodeRepositoryHandler<P: AbstractBarcodePlugin>(
     plugin: P
 ) : AbstractBukkitComponentHandler<P, BarcodeRepository>(plugin)  {
-    override fun processAnnotation(clazz: KClass<BarcodeRepository>) {
-        if (clazz.java.genericInterfaces.contains(BarcodeRepository::class.java)) {
-            registerComponent(clazz)
-        }
+    override fun validate(clazz: KClass<BarcodeRepository>): Boolean {
+        return clazz.isSubclassOf(BarcodeRepository::class)
     }
 
     override fun onPostEnable() {

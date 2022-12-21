@@ -39,10 +39,7 @@ class ModulePublisherPlugin : Plugin<Project> {
                     create<MavenPublication>("maven") {
                         artifact(javadocJar.get())
                         artifact(sourcesJar.get())
-                        artifact(tasks.getByName("jar"))
-                        tasks.findByName("shadowJar")?.let {
-                            artifact(it)
-                        }
+                        from(components["java"])
                         pom {
                             name.set(getExtra("publish.name"))
                             description.set(getExtra("publish.description"))

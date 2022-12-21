@@ -1,34 +1,28 @@
 plugins {
     id("barcodeframework.shared")
-    id("barcodeframework.shadow")
     id("barcodeframework.module-publisher")
     id("com.vjh0107.ksp-extension")
     kotlin("plugin.serialization")
 }
 
-group = "com.vjh0107.barcode"
-version = "1.0.0"
-
 dependencies {
-    implementationModule(Modules.COMMON)
+    apiModule(Modules.COMMON)
     with(Deps.Koin) {
-        implementation(CORE)
-        implementation(ANNOTATIONS)
+        api(CORE)
+        api(ANNOTATIONS)
         ksp(KSP_COMPILER)
         testImplementation(TEST)
     }
-    implementation(Deps.KotlinX.Coroutines.CORE)
-    implementationModule(Modules.KOIN)
-    implementationModule(Modules.DATABASE)
-    implementation(Deps.Library.HIKARICP)
-
-    implementation(Deps.Library.Logger.LOGBACK_CLASSIC)
-    implementation(Deps.Library.Logger.SLF4J_JDK14)
-    implementationAll(Deps.Ktor.SERVER)
-    implementation(Deps.KotlinX.Serialization.JSON)
-
-    implementation(Deps.Library.MYSQL_CONNECTOR)
-    implementationAll(Deps.EXPOSED)
+    api(Deps.KotlinX.Coroutines.CORE)
+    apiModule(Modules.KOIN)
+    apiModule(Modules.DATABASE)
+    api(Deps.Library.HIKARICP)
+    api(Deps.Library.Logger.LOGBACK_CLASSIC)
+    api(Deps.Library.Logger.SLF4J_JDK14)
+    apiAll(Deps.Ktor.SERVER)
+    api(Deps.KotlinX.Serialization.JSON)
+    api(Deps.Library.MYSQL_CONNECTOR)
+    apiAll(Deps.EXPOSED)
     testImplementation(Deps.KotlinX.Coroutines.TEST)
     testImplementationAll(Deps.KOTEST)
 }

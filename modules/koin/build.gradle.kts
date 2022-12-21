@@ -4,15 +4,12 @@ plugins {
     id("com.vjh0107.ksp-extension")
 }
 
-group = "com.vjh0107.barcode"
-version = "1.0.0"
-
 dependencies {
-    implementation(Deps.KotlinX.Coroutines.CORE)
-    implementationModule(Modules.COMMON)
-    implementation(Deps.Koin.CORE)
-    implementation(Deps.Koin.ANNOTATIONS)
-    implementation(Deps.Library.KOTLIN_REFLECT)
+    api(Deps.KotlinX.Coroutines.CORE)
+    apiModule(Modules.COMMON)
+    api(Deps.Koin.CORE)
+    api(Deps.Koin.ANNOTATIONS)
+    api(Deps.Library.KOTLIN_REFLECT)
 
     testImplementation(Deps.Koin.TEST)
     testImplementation(Deps.KotlinX.Coroutines.TEST)

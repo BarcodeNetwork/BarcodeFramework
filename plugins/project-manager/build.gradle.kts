@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.BarcodeNetwork.BarcodeGradlePlugins:project-extensions:1.1.1")
+    implementation("com.github.BarcodeNetwork.BarcodeGradlePlugins:project-extensions:1.1.2")
 }
 
 gradlePlugin {

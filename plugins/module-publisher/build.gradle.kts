@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.loadProperties
+
 plugins {
     `kotlin-dsl`
     `maven-publish`
@@ -8,8 +10,7 @@ repositories {
 }
 
 dependencies {
-    api(gradleApi())
-}
+    api(gradleApi()) }
 
 gradlePlugin {
     plugins {

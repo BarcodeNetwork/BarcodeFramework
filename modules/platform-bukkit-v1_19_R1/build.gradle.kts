@@ -4,8 +4,6 @@ plugins {
     id("com.vjh0107.special-source")
 }
 
-version = "1.0.0"
-
 barcodeTasks {
     archiveTask = tasks.shadowJar
 
@@ -21,10 +19,8 @@ dependencies {
     compileOnly(Deps.Minecraft.PAPER_API)
     compileOnly(Deps.Minecraft.KyoriAdventure.API)
     compileOnly(Deps.Minecraft.KyoriAdventure.BUKKIT)
-
-    implementationModule(Modules.COMMON)
-    implementationModule(Modules.Bukkit.COMMON)
-
+    apiModule(Modules.COMMON)
+    apiModule(Modules.Bukkit.COMMON)
     testImplementationAll(Deps.KOTEST)
     testImplementationModule(Modules.COMMON)
 }

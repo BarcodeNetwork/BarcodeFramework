@@ -15,6 +15,7 @@ pluginManagement {
         id("com.vjh0107.bukkit-resource-generator") version barcodeGradlePluginsVersion apply false
         id("com.vjh0107.special-source") version barcodeGradlePluginsVersion apply false
         id("com.vjh0107.ksp-extension") version "1.0.2" apply false
+        id("com.vjh0107.bukkit-executor") version barcodeGradlePluginsVersion apply false
     }
 
     repositories {

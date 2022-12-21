@@ -5,14 +5,13 @@ plugins {
     id("com.vjh0107.bukkit-resource-generator")
     id("com.vjh0107.special-source")
     id("com.vjh0107.ksp-extension")
+    id("com.vjh0107.bukkit-executor")
     kotlin("plugin.serialization")
 }
 
-group = "com.vjh0107.barcode"
-version = "1.0.0"
-
 tasks.shadowJar {
     this.relocate("dev.jorel.commandapi", "com.vjh0107.barcode.commandapi")
+    this.setBuildOutputDir("../../test-bukkit/plugins")
 }
 
 barcodeTasks {
@@ -32,10 +31,18 @@ barcodeTasks {
     specialSource {
         version.set("1.19.2")
         archiveTask.set(tasks.shadowJar)
+        enabled.set(false)
+    }
+    bukkitExecutor {
         enabled.set(true)
+        archiveTask.set(tasks.shadowJar)
+        bukkitDir.set(file("../../test-bukkit/"))
+        bukkitFileName.set("paper.jar")
     }
 }
-
+tasks.shadowJar {
+    finalizedBy(tasks.runBukkit)
+}
 dependencies {
     compileOnly(Deps.Minecraft.PAPER_API)
     compileOnly(Deps.Minecraft.SPIGOT_REMAPPED)
@@ -44,25 +51,25 @@ dependencies {
     compileOnly(Deps.Minecraft.Plugin.VAULT)
     compileOnly(Deps.Minecraft.Plugin.PAPI)
 
-    implementation(Deps.Minecraft.Plugin.COMMAND_API)
-    implementation(Deps.KotlinX.Coroutines.CORE)
-    implementation(Deps.KotlinX.Serialization.JSON)
-    implementationAll(Deps.Ktor.CLIENT)
-    implementationAll(Deps.EXPOSED)
-    implementation(Deps.Koin.CORE)
-    implementation(Deps.Koin.ANNOTATIONS)
+    api(Deps.Minecraft.Plugin.COMMAND_API)
+    api(Deps.KotlinX.Coroutines.CORE)
+    api(Deps.KotlinX.Serialization.JSON)
+    apiAll(Deps.Ktor.CLIENT)
+    apiAll(Deps.EXPOSED)
+    api(Deps.Koin.CORE)
+    api(Deps.Koin.ANNOTATIONS)
     ksp(Deps.Koin.KSP_COMPILER)
-    implementation(Deps.Library.KOTLIN_REFLECT)
-    implementation(Deps.Library.MYSQL_CONNECTOR)
-    implementation(Deps.Library.HIKARICP)
-    implementation(Deps.Library.SQLITE)
+    api(Deps.Library.KOTLIN_REFLECT)
+    api(Deps.Library.MYSQL_CONNECTOR)
+    api(Deps.Library.HIKARICP)
+    api(Deps.Library.SQLITE)
 
-    implementationModule(Modules.KOIN)
-    implementationModule(Modules.DATABASE)
-    implementationModule(Modules.COMMON)
-    implementationModule(Modules.SHEETS)
-    implementationModule(Modules.Bukkit.COMMON)
-    implementationModule(Modules.Bukkit.V1_19_R1)
+    apiModule(Modules.KOIN)
+    apiModule(Modules.DATABASE)
+    apiModule(Modules.COMMON)
+    apiModule(Modules.SHEETS)
+    apiModule(Modules.Bukkit.COMMON)
+    apiModule(Modules.Bukkit.V1_19_R1)
 
     testImplementation(Deps.Minecraft.PAPER_API)
     testImplementation(Deps.KotlinX.Coroutines.TEST)

@@ -5,10 +5,14 @@ import com.vjh0107.barcode.framework.component.BarcodeRepository
 import com.vjh0107.barcode.framework.component.handler.AbstractBukkitComponentHandler
 import com.vjh0107.barcode.framework.component.handler.BarcodeComponentHandler
 import com.vjh0107.barcode.framework.component.handler.HandlerPriority
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
 @BarcodeComponentHandler(priority = HandlerPriority.REPOSITORY)
+@Factory(binds = [AbstractBukkitComponentHandler::class])
+@Named("BarcodeRepositoryHandler")
 class BarcodeRepositoryHandler<P: AbstractBarcodePlugin>(
     plugin: P
 ) : AbstractBukkitComponentHandler<P, BarcodeRepository>(plugin)  {

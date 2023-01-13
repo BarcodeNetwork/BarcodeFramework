@@ -36,9 +36,10 @@ abstract class BarcodeEntityClass<out E : BarcodePlayerEntity>(
      *
      * @param playerIDWrapper PlayerIDWrapper
      * @param init init block
+     * @return entity
      */
-    fun new(playerIDWrapper: PlayerIDWrapper, init: E.() -> Unit) {
-        new(playerIDWrapper.profileID, playerIDWrapper.minecraftPlayerID, init)
+    fun new(playerIDWrapper: PlayerIDWrapper, init: E.() -> Unit = {}): E {
+        return new(playerIDWrapper.profileID, playerIDWrapper.minecraftPlayerID, init)
     }
 
     /**
@@ -47,13 +48,14 @@ abstract class BarcodeEntityClass<out E : BarcodePlayerEntity>(
      * @param profileID ProfileID
      * @param playerUUID MinecraftPlayerID
      * @param init init block
+     * @return entity
      */
-    fun new(profileID: ProfileID, playerUUID: MinecraftPlayerID, init: E.() -> Unit) {
+    fun new(profileID: ProfileID, playerUUID: MinecraftPlayerID, init: E.() -> Unit = {}): E {
         val playerDataInit: E.() -> Unit = {
             this.profileID = profileID
             this.playerID = playerUUID
             this.init()
         }
-        this.new(null, playerDataInit)
+        return this.new(null, playerDataInit)
     }
 }

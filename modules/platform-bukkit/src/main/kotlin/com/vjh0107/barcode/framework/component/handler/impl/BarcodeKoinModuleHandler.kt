@@ -23,6 +23,7 @@ class BarcodeKoinModuleHandler<P: AbstractBarcodePlugin>(
     }
 
     override fun onPostEnable() {
+
         this.getComponents().forEach {
             getKoin().loadModules(listOf(it.targetModule))
         }

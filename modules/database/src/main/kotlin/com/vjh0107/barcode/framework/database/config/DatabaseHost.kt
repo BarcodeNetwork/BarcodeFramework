@@ -5,5 +5,6 @@ data class DatabaseHost(
     val port: String,
     val user: String,
     val password: String,
-    val databaseName: String
+    val databaseName: String,
+    val poolName: String
 )

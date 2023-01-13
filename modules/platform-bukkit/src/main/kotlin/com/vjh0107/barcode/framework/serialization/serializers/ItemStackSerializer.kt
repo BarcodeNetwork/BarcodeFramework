@@ -24,8 +24,6 @@ object ItemStackSerializer : KSerializer<ItemStack> {
             val itemStack = dataInput.readObject() as ItemStack
             dataInput.close()
             itemStack
-//        } catch (e: IOException) {
-//            throw IOException("Unable to decode class type.", e)
         } catch (e: ClassNotFoundException) {
             throw IOException("Unable to decode class type.", e)
         }

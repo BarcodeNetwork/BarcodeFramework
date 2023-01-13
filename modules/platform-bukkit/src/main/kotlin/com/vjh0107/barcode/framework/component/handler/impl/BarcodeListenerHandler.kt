@@ -30,6 +30,5 @@ class BarcodeListenerHandler<P: AbstractBarcodePlugin>(
 
     override fun onDisable() {
         HandlerList.unregisterAll(plugin)
-        plugin.logger.info("모든 ${plugin.name} 의 Listener 를 unregister 합니다.")
     }
 }

@@ -4,7 +4,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 /**
- * 로그를 추적합니다.
+ * context 를 추적 후 로그에 같이 표기합니다.
  */
 fun Logger.traceableLog(logLevel: Level, message: String, artifact: String = "com.vjh0107.barcode") {
     val where = Thread

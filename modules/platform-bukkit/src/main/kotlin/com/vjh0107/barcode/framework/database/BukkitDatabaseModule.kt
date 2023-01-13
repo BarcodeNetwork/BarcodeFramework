@@ -22,7 +22,12 @@ class BukkitDatabaseModule {
     @Factory
     fun provideDataSource(@InjectedParam hostProvider: DatabaseHostProvider): BarcodeDataSource {
         val config: DatabaseConfig<HikariConfig> by inject { parametersOf(hostProvider.getDatabaseHost()) }
-        hostProvider.getLogger().info("HikariDataSource 에 성공적으로 연결하였습니다.")
+        val hikariConfig = config.get()
+        with(hostProvider.getLogger()) {
+            info("HikariDataSource 에 성공적으로 연결하였습니다.")
+            info("유저: ${hikariConfig.username}")
+            info("커넥션 풀: ${hikariConfig.poolName}")
+        }
         return HikariBarcodeDataSource(config)
     }
 

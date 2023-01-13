@@ -23,7 +23,7 @@ object ReflectionInjector {
         val parameters = constructors.parameters.map { parameter ->
             val parameterKClass = parameter.type.classifier as KClass<*>
             if (providedInstanceMap != null) {
-                val providedInstance = providedInstanceMap.filter { parameterKClass.isSuperclassOf(it.key) }.values.first()
+                val providedInstance = providedInstanceMap.filter { parameterKClass.isSuperclassOf(it.key) }.values.firstOrNull()
                 if (providedInstance != null) {
                     return@map providedInstance
                 }

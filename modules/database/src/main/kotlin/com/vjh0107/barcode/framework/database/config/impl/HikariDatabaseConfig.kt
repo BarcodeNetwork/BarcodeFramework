@@ -30,7 +30,7 @@ open class HikariDatabaseConfig(private val host: DatabaseHost) : AbstractDataba
             username = host.user
             password = host.password
             connectionTestQuery = "SELECT 1"
-            poolName = "BarcodeNetwork MySQL Pool"
+            poolName = host.poolName
             properties.forEach { (property, value) ->
                 addDataSourceProperty(property, value)
             }

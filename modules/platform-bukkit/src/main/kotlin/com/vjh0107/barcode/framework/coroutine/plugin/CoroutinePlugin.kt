@@ -1,8 +1,7 @@
 package com.vjh0107.barcode.framework.coroutine.plugin
 
-import com.vjh0107.barcode.framework.coroutine.service.WakeUpBlockService
+import com.vjh0107.barcode.framework.coroutine.DisposableCoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlin.coroutines.CoroutineContext
 
 interface CoroutinePlugin {
 
@@ -11,9 +10,7 @@ interface CoroutinePlugin {
      */
     val scope: CoroutineScope
 
-    val wakeUpBlockService: WakeUpBlockService
+    val mainDispatcher: DisposableCoroutineDispatcher
 
-    val mainDispatcher: CoroutineContext
-
-    val asyncDispatcher: CoroutineContext
+    val asyncDispatcher: DisposableCoroutineDispatcher
 }

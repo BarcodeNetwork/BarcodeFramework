@@ -2,10 +2,9 @@ package com.vjh0107.barcode.framework.database.player.repository
 
 import com.vjh0107.barcode.framework.AbstractBarcodePlugin
 import com.vjh0107.barcode.framework.LoggerProvider
-import com.vjh0107.barcode.framework.component.BarcodePluginManager
 import com.vjh0107.barcode.framework.component.BarcodeRepository
-import com.vjh0107.barcode.framework.coroutine.extensions.MinecraftAsync
-import com.vjh0107.barcode.framework.coroutine.extensions.MinecraftMain
+import com.vjh0107.barcode.framework.coroutine.MinecraftAsync
+import com.vjh0107.barcode.framework.coroutine.MinecraftMain
 import com.vjh0107.barcode.framework.database.datasource.BarcodeDataSource
 import com.vjh0107.barcode.framework.database.player.PlayerIDWrapper
 import com.vjh0107.barcode.framework.database.player.data.SavablePlayerData
@@ -31,7 +30,7 @@ abstract class AbstractSavablePlayerDataRepository<T : SavablePlayerData>(
 
     final override fun close() {
         dataSource.close()
-        getLogger().info("BarcodeDataSource 를 성공적으로 close 하였습니다.")
+        getLogger().info("BarcodeDataSource 를 성공적으로 닫았습니다.")
     }
 
     abstract fun getTablesToLoad(): List<Table>
@@ -48,9 +47,9 @@ abstract class AbstractSavablePlayerDataRepository<T : SavablePlayerData>(
         CoroutineScope(Dispatchers.MinecraftMain(plugin)).launch {
             if (!dataMap.containsKey(id)) {
                 val playerData = withContext(Dispatchers.MinecraftAsync(plugin)) {
-                    // TODO: atomicfu 로 변경
                     val data = loadData(id)
                     dataMap[id] = data
+                    data.isCompletelyLoaded = true
                     data
                 }
                 withContext(Dispatchers.MinecraftMain(plugin)) {

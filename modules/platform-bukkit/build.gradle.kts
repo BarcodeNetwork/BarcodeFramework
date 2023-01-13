@@ -9,9 +9,13 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+val isExecutingBukkit = false
+
 tasks.shadowJar {
     this.relocate("dev.jorel.commandapi", "com.vjh0107.barcode.commandapi")
-    this.setBuildOutputDir("../../test-bukkit/plugins")
+    if (isExecutingBukkit) {
+        this.setBuildOutputDir("../../test-bukkit/plugins")
+    }
 }
 
 barcodeTasks {
@@ -31,10 +35,10 @@ barcodeTasks {
     specialSource {
         version.set("1.19.2")
         archiveTask.set(tasks.shadowJar)
-        enabled.set(false)
+        enabled.set(true)
     }
     bukkitExecutor {
-        enabled.set(true)
+        enabled.set(isExecutingBukkit)
         archiveTask.set(tasks.shadowJar)
         bukkitDir.set(file("../../test-bukkit/"))
         bukkitFileName.set("paper.jar")
@@ -72,6 +76,7 @@ dependencies {
     apiModule(Modules.Bukkit.V1_19_R1)
 
     testImplementation(Deps.Minecraft.PAPER_API)
+    testImplementation(Deps.KotlinX.Coroutines.CORE)
     testImplementation(Deps.KotlinX.Coroutines.TEST)
     testImplementation(Deps.Library.MOCKK)
     testImplementationAll(Deps.KOTEST)

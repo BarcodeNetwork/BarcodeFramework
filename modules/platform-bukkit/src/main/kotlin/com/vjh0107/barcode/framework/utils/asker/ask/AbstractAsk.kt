@@ -1,6 +1,6 @@
 package com.vjh0107.barcode.framework.utils.asker.ask
 
-import com.vjh0107.barcode.framework.coroutine.extensions.MinecraftAsync
+import com.vjh0107.barcode.framework.coroutine.MinecraftAsync
 import com.vjh0107.barcode.framework.utils.asker.AskManager
 import com.vjh0107.barcode.framework.utils.asker.data.AskPlayer
 import com.vjh0107.barcode.framework.utils.messagesender.sendBNMessage

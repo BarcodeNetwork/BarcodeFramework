@@ -1,9 +1,9 @@
 package com.vjh0107.barcode.framework
 
 import com.vjh0107.barcode.framework.component.handler.ComponentHandlers
-import com.vjh0107.barcode.framework.coroutine.elements.BarcodePluginElement
+import com.vjh0107.barcode.framework.coroutine.elements.CoroutinePluginElement
 import com.vjh0107.barcode.framework.coroutine.elements.CoroutineTimingsElement
-import com.vjh0107.barcode.framework.coroutine.extensions.MinecraftMain
+import com.vjh0107.barcode.framework.coroutine.MinecraftMain
 import com.vjh0107.barcode.framework.database.config.DatabaseHost
 import com.vjh0107.barcode.framework.database.config.DatabaseHostProvider
 import com.vjh0107.barcode.framework.events.BarcodePluginDisableEvent
@@ -24,19 +24,17 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class AbstractBarcodePlugin : JavaPlugin(), BarcodeApplication, DatabaseHostProvider, CoroutineScope {
     /**
-     * 컴포넌트 handler 들
+     * componenthandler 들은 barcodecomponent 들의 객체 생성을 관리합니다.
+     * 또한 객체의 생성과 함께 생성자주입을 지원합니다.
      */
     private val componentHandlers: ComponentHandlers by inject { parametersOf(this) }
 
-    /**
-     * 플러그인이 비활성화되면 자동으로 unregister 됩니다.
-     */
     fun <LISTENER : Listener> registerListener(listener: LISTENER) {
         this.server.pluginManager.registerEvents(listener, this)
     }
 
     override val coroutineContext: CoroutineContext
-        get() = SupervisorJob() + Dispatchers.MinecraftMain(this) + object : CoroutineTimingsElement() {} + BarcodePluginElement(this) + CoroutineExceptionHandler { context, throwable ->
+        get() = SupervisorJob() + Dispatchers.MinecraftMain(this) + object : CoroutineTimingsElement() {} + CoroutinePluginElement(this) + CoroutineExceptionHandler { context, throwable ->
             logger.severe("잡히지 않은 예외가 발생하였습니다. CoroutineContext: $context")
         }
 
@@ -54,7 +52,7 @@ abstract class AbstractBarcodePlugin : JavaPlugin(), BarcodeApplication, Databas
         componentHandlers.get().forEach {
             it.onEnable()
         }
-        this.logger.info("ComponentHandler 가 정상적으로 등록되었습니다.")
+        this.logger.info("§6성공적으로 플러그인이 로드되었습니다.")
         onPostEnable()
     }
 
@@ -71,7 +69,7 @@ abstract class AbstractBarcodePlugin : JavaPlugin(), BarcodeApplication, Databas
     }
 
     /**
-     * 컴포넌트 핸들러들 전부 리로드
+     * componenthandler들을 전부 리로드함으로써 플러그인이 리로드됩니다.
      */
     fun reloadPlugin() {
         componentHandlers.get().forEach {
@@ -79,7 +77,6 @@ abstract class AbstractBarcodePlugin : JavaPlugin(), BarcodeApplication, Databas
         }
     }
 
-    // publicize
     public override fun getFile(): File {
         return super.getFile()
     }
@@ -92,8 +89,8 @@ abstract class AbstractBarcodePlugin : JavaPlugin(), BarcodeApplication, Databas
             val databaseName = databaseSection.getString("databaseName") ?: throw KeyNotFoundException()
             val user = databaseSection.getString("user") ?: throw KeyNotFoundException()
             val password = databaseSection.getString("password") ?: throw KeyNotFoundException()
-
-            DatabaseHost(address, port, user, password, databaseName)
+            val poolName = this.name
+            DatabaseHost(address, port, user, password, databaseName, poolName)
         } catch (exception: KeyNotFoundException) {
             logger.severe("config.yml 를 설정해주세요. 'database.(host, port, databaseName, user, password)'")
             pluginLoader.disablePlugin(this)

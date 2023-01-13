@@ -1,13 +1,16 @@
 package com.vjh0107.barcode.framework.coroutine.service.impl
 
+import com.vjh0107.barcode.framework.AbstractBarcodePlugin
 import com.vjh0107.barcode.framework.coroutine.service.WakeUpBlockService
 import com.vjh0107.barcode.framework.utils.findClazz
-import org.bukkit.plugin.Plugin
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.locks.LockSupport
 
-internal class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
+@Factory(binds = [WakeUpBlockService::class])
+class WakeUpBlockServiceImpl(@InjectedParam private val plugin: AbstractBarcodePlugin) : WakeUpBlockService {
     private var threadSupport: ExecutorService? = null
 
     private val craftSchedulerClazz by lazy {

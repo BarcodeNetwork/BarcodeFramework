@@ -1,18 +1,24 @@
 package com.vjh0107.barcode.framework.coroutine.dispatchers
 
+import com.vjh0107.barcode.framework.AbstractBarcodePlugin
 import com.vjh0107.barcode.framework.coroutine.service.WakeUpBlockService
 import com.vjh0107.barcode.framework.coroutine.elements.CoroutineTimingsElement
+import com.vjh0107.barcode.framework.koin.injector.inject
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.plugin.Plugin
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.annotation.Named
+import org.koin.core.parameter.parametersOf
 import kotlin.coroutines.CoroutineContext
 
-/**
- * 마인크래프트 메인 쓰레드 디스패처이다.
- */
+@Factory(binds = [CoroutineDispatcher::class])
+@Named("main")
 class MainDispatcher(
-    private val plugin: Plugin,
-    private val wakeUpBlockService: WakeUpBlockService
+    @InjectedParam private val plugin: AbstractBarcodePlugin
 ) : CoroutineDispatcher() {
+    private val wakeUpBlockService: WakeUpBlockService by inject { parametersOf(plugin) }
+
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
         wakeUpBlockService.ensureWakeup()
         return !plugin.server.isPrimaryThread

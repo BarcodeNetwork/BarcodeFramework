@@ -125,7 +125,6 @@ abstract class AbstractBarcodeApplication : KoinContextualApplication, DatabaseH
      */
     final override fun onPreLoad() {
         componentHandlers.get().forEach { it.onEnable() }
-        this.getLogger().info("ComponentHandler 가 정상적으로 등록되었습니다.")
     }
 
     final override fun onDisable() {

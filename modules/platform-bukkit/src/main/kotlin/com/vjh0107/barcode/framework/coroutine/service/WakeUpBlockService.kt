@@ -4,7 +4,6 @@ package com.vjh0107.barcode.framework.coroutine.service
  * 서버 startup 과정에서만 사용된다. 서버가 실행중일때는 아무 영향을 주지 않는다.
  */
 interface WakeUpBlockService {
-
     /**
      * 메인쓰레드 입니다.
      */

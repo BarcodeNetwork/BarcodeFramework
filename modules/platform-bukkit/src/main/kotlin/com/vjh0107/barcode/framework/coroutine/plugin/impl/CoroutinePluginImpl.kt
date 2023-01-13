@@ -1,29 +1,24 @@
 package com.vjh0107.barcode.framework.coroutine.plugin.impl
 
 import com.vjh0107.barcode.framework.AbstractBarcodePlugin
-import com.vjh0107.barcode.framework.coroutine.dispatchers.AsyncDispatcher
-import com.vjh0107.barcode.framework.coroutine.dispatchers.MainDispatcher
+import com.vjh0107.barcode.framework.coroutine.DisposableCoroutineDispatcher
 import com.vjh0107.barcode.framework.coroutine.events.CoroutineExceptionEvent
 import com.vjh0107.barcode.framework.coroutine.plugin.CoroutinePlugin
-import com.vjh0107.barcode.framework.coroutine.service.WakeUpBlockService
-import com.vjh0107.barcode.framework.coroutine.service.impl.WakeUpBlockServiceImpl
+import com.vjh0107.barcode.framework.koin.injector.inject
 import kotlinx.coroutines.*
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.qualifier.named
 import java.lang.Runnable
 import java.util.logging.Level
-import kotlin.coroutines.CoroutineContext
 
-class CoroutinePluginImpl(private val plugin: AbstractBarcodePlugin) : CoroutinePlugin {
-    override val wakeUpBlockService: WakeUpBlockService by lazy {
-        WakeUpBlockServiceImpl(plugin)
-    }
+@Factory(binds = [CoroutinePlugin::class])
+class CoroutinePluginImpl(
+    @InjectedParam private val plugin: AbstractBarcodePlugin
+) : CoroutinePlugin {
+    override val mainDispatcher: DisposableCoroutineDispatcher by inject(named("main"))
 
-    override val mainDispatcher: CoroutineContext by lazy {
-        MainDispatcher(plugin, wakeUpBlockService)
-    }
-
-    override val asyncDispatcher: CoroutineContext by lazy {
-        AsyncDispatcher(plugin, wakeUpBlockService)
-    }
+    override val asyncDispatcher: DisposableCoroutineDispatcher by inject(named("async"))
 
     override val scope: CoroutineScope
 
@@ -37,7 +32,7 @@ class CoroutinePluginImpl(private val plugin: AbstractBarcodePlugin) : Coroutine
 
                     if (!coroutineExceptionEvent.isCancelled) {
                         if (exception !is CancellationException) {
-                            plugin.logger.log(Level.SEVERE, "코루틴 내에서 오류가 발생하였으나, 바코드 코루틴 디스패처의 문제가 아닙니다.", exception)
+                            plugin.logger.log(Level.SEVERE, "코루틴 내에서 오류가 발생하였으나, BarcodeFramework 코루틴 디스패처의 문제가 아닙니다.", exception)
                         }
                     }
                 })

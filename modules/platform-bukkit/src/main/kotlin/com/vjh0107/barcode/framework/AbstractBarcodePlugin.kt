@@ -18,6 +18,7 @@ import kotlinx.coroutines.SupervisorJob
 import net.kyori.adventure.text.Component
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
+import org.fusesource.jansi.Ansi
 import org.koin.core.parameter.parametersOf
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -52,7 +53,7 @@ abstract class AbstractBarcodePlugin : JavaPlugin(), BarcodeApplication, Databas
         componentHandlers.get().forEach {
             it.onEnable()
         }
-        this.logger.info("§6성공적으로 플러그인이 로드되었습니다.")
+        this.logger.info(Ansi.ansi().fgBright(Ansi.Color.YELLOW).boldOff().toString() + "성공적으로 플러그인이 로드되었습니다.")
         onPostEnable()
     }
 

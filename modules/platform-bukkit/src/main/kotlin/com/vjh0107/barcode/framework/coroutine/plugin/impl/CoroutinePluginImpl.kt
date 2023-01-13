@@ -8,6 +8,7 @@ import com.vjh0107.barcode.framework.koin.injector.inject
 import kotlinx.coroutines.*
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import java.lang.Runnable
 import java.util.logging.Level
@@ -16,9 +17,13 @@ import java.util.logging.Level
 class CoroutinePluginImpl(
     @InjectedParam private val plugin: AbstractBarcodePlugin
 ) : CoroutinePlugin {
-    override val mainDispatcher: DisposableCoroutineDispatcher by inject(named("main"))
+    override val mainDispatcher: DisposableCoroutineDispatcher by inject(named("main")) {
+        parametersOf(plugin)
+    }
 
-    override val asyncDispatcher: DisposableCoroutineDispatcher by inject(named("async"))
+    override val asyncDispatcher: DisposableCoroutineDispatcher by inject(named("async")) {
+        parametersOf(plugin)
+    }
 
     override val scope: CoroutineScope
 

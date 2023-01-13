@@ -35,7 +35,7 @@ barcodeTasks {
     specialSource {
         version.set("1.19.2")
         archiveTask.set(tasks.shadowJar)
-        enabled.set(true)
+        enabled.set(false)
     }
     bukkitExecutor {
         enabled.set(isExecutingBukkit)

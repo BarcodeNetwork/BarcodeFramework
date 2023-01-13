@@ -26,7 +26,7 @@ abstract class AbstractPlayerDataRepository<T : PlayerData>(
         return dataMap[playerID]
     }
 
-    override fun unregisterSafe(id: PlayerIDWrapper) {
+    open override fun unregisterSafe(id: PlayerIDWrapper) {
         getPlayerData(id)?.close() ?: throw PlayerDataNotFoundException(id)
         dataMap.remove(id)
     }
@@ -36,7 +36,7 @@ abstract class AbstractPlayerDataRepository<T : PlayerData>(
         setup(PlayerIDFactory.getPlayerID(event.player))
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onQuit(event: PlayerQuitEvent) {
         unregisterSafe(PlayerIDFactory.getPlayerID(event.player))
     }

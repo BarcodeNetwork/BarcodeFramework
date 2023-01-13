@@ -3,11 +3,10 @@ package com.vjh0107.barcode.framework.database.player.repository
 import com.vjh0107.barcode.framework.AbstractBarcodePlugin
 import com.vjh0107.barcode.framework.LoggerProvider
 import com.vjh0107.barcode.framework.component.BarcodeRepository
-import com.vjh0107.barcode.framework.coroutine.MinecraftAsync
 import com.vjh0107.barcode.framework.coroutine.MinecraftMain
 import com.vjh0107.barcode.framework.database.datasource.BarcodeDataSource
 import com.vjh0107.barcode.framework.database.player.PlayerIDWrapper
-import com.vjh0107.barcode.framework.database.player.data.SavablePlayerData
+import com.vjh0107.barcode.framework.database.player.data.PlayerData
 import com.vjh0107.barcode.framework.database.player.events.BarcodePlayerDataLoadEvent
 import com.vjh0107.barcode.framework.database.player.getPlayer
 import com.vjh0107.barcode.framework.exceptions.playerdata.PlayerDataNotFoundException
@@ -23,7 +22,7 @@ import java.util.logging.Logger
  * BarcodeRepository 입니다.
  * 가장 먼저 초기화되는 컴포넌트 입니다.
  */
-abstract class AbstractSavablePlayerDataRepository<T : SavablePlayerData>(
+abstract class AbstractSavablePlayerDataRepository<T : PlayerData>(
     plugin: AbstractBarcodePlugin
 ) : AbstractPlayerDataRepository<T>(plugin), SavablePlayerDataRepository<T>, BarcodeRepository, LoggerProvider {
     val dataSource: BarcodeDataSource by inject { parametersOf(plugin) }
@@ -46,10 +45,9 @@ abstract class AbstractSavablePlayerDataRepository<T : SavablePlayerData>(
     final override fun setup(id: PlayerIDWrapper) {
         CoroutineScope(Dispatchers.MinecraftMain(plugin)).launch {
             if (!dataMap.containsKey(id)) {
-                val playerData = withContext(Dispatchers.MinecraftAsync(plugin)) {
+                val playerData = withContext(Dispatchers.IO) {
                     val data = loadData(id)
                     dataMap[id] = data
-                    data.isCompletelyLoaded = true
                     data
                 }
                 withContext(Dispatchers.MinecraftMain(plugin)) {
@@ -61,7 +59,7 @@ abstract class AbstractSavablePlayerDataRepository<T : SavablePlayerData>(
 
     final override fun unregisterSafe(id: PlayerIDWrapper) {
         val playerData = getPlayerData(id) ?: throw PlayerDataNotFoundException(id)
-        if (playerData.isCompletelyLoaded) {
+        if (dataMap.containsKey(id)) {
             CoroutineScope(Dispatchers.IO).launch {
                 saveData(id, playerData)
                 playerData.close()

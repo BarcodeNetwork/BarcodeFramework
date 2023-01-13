@@ -1,6 +1,7 @@
 package com.vjh0107.barcode.framework.coroutine.dispatchers
 
 import com.vjh0107.barcode.framework.AbstractBarcodePlugin
+import com.vjh0107.barcode.framework.coroutine.DisposableCoroutineDispatcher
 import com.vjh0107.barcode.framework.coroutine.service.WakeUpBlockService
 import com.vjh0107.barcode.framework.coroutine.elements.CoroutineTimingsElement
 import com.vjh0107.barcode.framework.koin.injector.inject
@@ -12,11 +13,11 @@ import org.koin.core.annotation.Named
 import org.koin.core.parameter.parametersOf
 import kotlin.coroutines.CoroutineContext
 
-@Factory(binds = [CoroutineDispatcher::class])
+@Factory(binds = [DisposableCoroutineDispatcher::class])
 @Named("main")
 class MainDispatcher(
     @InjectedParam private val plugin: AbstractBarcodePlugin
-) : CoroutineDispatcher() {
+) : DisposableCoroutineDispatcher() {
     private val wakeUpBlockService: WakeUpBlockService by inject { parametersOf(plugin) }
 
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
@@ -38,5 +39,9 @@ class MainDispatcher(
 
         timedRunnable.queue.add(block)
         plugin.server.scheduler.runTask(plugin, timedRunnable)
+    }
+
+    override fun dispose() {
+        wakeUpBlockService.dispose()
     }
 }

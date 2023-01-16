@@ -2,15 +2,12 @@ package com.vjh0107.barcode.framework
 
 import com.vjh0107.barcode.framework.component.BarcodeComponent
 import com.vjh0107.barcode.framework.component.BarcodeKoinModule
-import com.vjh0107.barcode.framework.component.BarcodeRegistrable
-import com.vjh0107.barcode.framework.component.handler.impl.registrable.Registrar
-import com.vjh0107.barcode.framework.component.handler.impl.registrable.UnRegistrar
-import com.vjh0107.barcode.framework.koin.getKoin
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.koin.core.annotation.InjectedParam
 import org.koin.dsl.module
@@ -40,5 +37,6 @@ class BarcodeFrameworkModule(private val plugin: AbstractBarcodePlugin) : Barcod
     override val targetModule = module {
         factory { params -> providePluginNamespacedKey(params.get()) }
         single { provideKtorClient() }
+        single { Bukkit.getLogger() }
     }
 }

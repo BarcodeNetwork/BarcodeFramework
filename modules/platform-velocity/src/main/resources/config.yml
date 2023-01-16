@@ -1,0 +1,4 @@
+ignoringInfoMessages: false
+netty:
+  host: localhost
+  port: 30107

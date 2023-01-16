@@ -16,6 +16,7 @@ tasks.shadowJar {
     if (isExecutingBukkit) {
         this.setBuildOutputDir("../../test-bukkit/plugins")
     }
+    finalizedBy(tasks.runBukkit)
 }
 
 barcodeTasks {
@@ -44,9 +45,7 @@ barcodeTasks {
         bukkitFileName.set("paper.jar")
     }
 }
-tasks.shadowJar {
-    finalizedBy(tasks.runBukkit)
-}
+
 dependencies {
     compileOnly(Deps.Minecraft.PAPER_API)
     compileOnly(Deps.Minecraft.SPIGOT_REMAPPED)
@@ -74,6 +73,8 @@ dependencies {
     apiModule(Modules.SHEETS)
     apiModule(Modules.Bukkit.COMMON)
     apiModule(Modules.Bukkit.V1_19_R1)
+    apiModule(Modules.NETTY)
+    apiModule(Modules.PROXY_API)
 
     testImplementation(Deps.Minecraft.PAPER_API)
     testImplementation(Deps.KotlinX.Coroutines.CORE)

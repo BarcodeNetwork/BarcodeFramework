@@ -46,12 +46,11 @@ class BarcodeRegistrableHandler<P: AbstractBarcodePlugin>(
         registrableMap.forEach { (_, registrable) ->
             registrable.close()
         }
-        registrableMap.forEach { (id, registrable) ->
+        registrableMap.forEach { (_, registrable) ->
             unregisterUnRegistrars(registrable)
-            plugin.logger.info("성공적으로 registrar $id 의 등록을 해제하였습니다.")
         }
         registrableMap.clear()
-        plugin.logger.info("성공적으로 ${plugin.name} 의 모든 registrar 을 등록 해제하였습니다.")
+        plugin.logger.info("Registrable 을 성공적으로 닫았습니다.")
     }
 
     private fun registerRegistrars(registrable: BarcodeRegistrable) {

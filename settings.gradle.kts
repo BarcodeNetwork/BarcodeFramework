@@ -9,6 +9,7 @@ pluginManagement {
     plugins {
         kotlin("jvm") version kotlinVersion apply false
         kotlin("plugin.serialization") version kotlinVersion apply false
+        kotlin("kapt") version kotlinVersion apply false
         id("io.ktor.plugin") version ktorVersion apply false
         id("com.google.devtools.ksp") version kspVersion apply false
         id("com.github.johnrengelman.shadow") version "7.1.2" apply false

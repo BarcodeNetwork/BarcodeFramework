@@ -19,7 +19,7 @@ class NMSModule {
     }
 
     private fun getNMSVersion(): String {
-        val version = Bukkit.getServer().javaClass.getPackage().name;
-        return version.substring(version.lastIndexOf('.') + 1);
+        val version = Bukkit.getServer().javaClass.getPackage().name
+        return version.substring(version.lastIndexOf('.') + 1)
     }
 }

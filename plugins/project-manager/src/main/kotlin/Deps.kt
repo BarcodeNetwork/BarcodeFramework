@@ -12,6 +12,7 @@ object Deps {
         const val SPIGOT = "org.spigotmc:spigot:$version"
         const val SPIGOT_API = "org.spigotmc:spigot-api:$version"
         const val SPIGOT_REMAPPED = "org.spigotmc:spigot:$version:remapped-mojang"
+        const val VELOCITY = "com.velocitypowered:velocity-api:3.1.1"
 
         const val AUTH_LIB = "com.mojang:authlib:1.5.21"
         const val DATA_FIXER = "com.mojang:datafixerupper:4.0.26"
@@ -36,7 +37,6 @@ object Deps {
     object Library {
         val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         val KOTLIN_TEST = "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
-
         const val MYSQL_CONNECTOR = "mysql:mysql-connector-java:8.0.28"
         const val HIKARICP = "com.zaxxer:HikariCP:5.0.1"
         const val SQLITE = "org.xerial:sqlite-jdbc:3.36.0.3"

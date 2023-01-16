@@ -1,0 +1,4 @@
+netty:
+  enabled: false
+  host: localhost
+  port: 30107

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 
-class BarcodePlayerDataLoadEvent(player: Player, val playerData: PlayerData) : PlayerEvent(player) {
+class BarcodePlayerDataLoadEvent(player: Player, val playerData: PlayerData) : PlayerEvent(player, true) {
     companion object {
         @JvmStatic
         private val handlers: HandlerList = HandlerList()

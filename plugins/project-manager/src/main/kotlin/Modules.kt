@@ -25,4 +25,13 @@ object Modules {
     object KTOR : ModuleNotation {
         override val path = ":modules:platform-ktor"
     }
+    object VELOCITY : ModuleNotation {
+        override val path: String = ":modules:platform-velocity"
+    }
+    object NETTY : ModuleNotation {
+        override val path: String = ":modules:netty"
+    }
+    object PROXY_API : ModuleNotation {
+        override val path: String = ":modules:proxy-api"
+    }
 }

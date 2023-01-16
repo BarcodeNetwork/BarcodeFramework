@@ -6,19 +6,19 @@ import com.zaxxer.hikari.HikariConfig
 
 open class HikariDatabaseConfig(private val host: DatabaseHost) : AbstractDatabaseConfig<HikariConfig>() {
     override fun initDefaultProperties() {
-        this.setProperty("maximumPoolSize", "10");
-        this.setProperty("cachePrepStmts", "true");
-        this.setProperty("prepStmtCacheSize", "250");
-        this.setProperty("prepStmtCacheSqlLimit", "2048");
-        this.setProperty("useServerPrepStmts", "true");
-        this.setProperty("useLocalSessionState", "true");
-        this.setProperty("rewriteBatchedStatements", "true");
-        this.setProperty("cacheResultSetMetadata", "true");
-        this.setProperty("cacheServerConfiguration", "true");
-        this.setProperty("elideSetAutoCommits", "true");
-        this.setProperty("maintainTimeStats", "false");
-        this.setProperty("characterEncoding", "utf8");
-        this.setProperty("useUnicode", "true");
+        this.setProperty("maximumPoolSize", "10")
+        this.setProperty("cachePrepStmts", "true")
+        this.setProperty("prepStmtCacheSize", "250")
+        this.setProperty("prepStmtCacheSqlLimit", "2048")
+        this.setProperty("useServerPrepStmts", "true")
+        this.setProperty("useLocalSessionState", "true")
+        this.setProperty("rewriteBatchedStatements", "true")
+        this.setProperty("cacheResultSetMetadata", "true")
+        this.setProperty("cacheServerConfiguration", "true")
+        this.setProperty("elideSetAutoCommits", "true")
+        this.setProperty("maintainTimeStats", "false")
+        this.setProperty("characterEncoding", "utf8")
+        this.setProperty("useUnicode", "true")
     }
 
     var autoReconnect: Boolean = true

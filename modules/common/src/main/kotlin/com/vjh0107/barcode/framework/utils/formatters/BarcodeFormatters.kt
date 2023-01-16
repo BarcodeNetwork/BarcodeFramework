@@ -56,5 +56,5 @@ fun <T : Collection<String>> T.toBarcodeFormat(size: Int, message: String): Stri
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
 
 fun LocalDateTime.toBarcodeFormat() : String {
-    return this.format(dateTimeFormatter);
+    return this.format(dateTimeFormatter)
 }

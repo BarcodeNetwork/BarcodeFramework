@@ -3,7 +3,6 @@ package com.vjh0107.barcode.framework.database.player.repository
 import com.vjh0107.barcode.framework.AbstractBarcodePlugin
 import com.vjh0107.barcode.framework.LoggerProvider
 import com.vjh0107.barcode.framework.component.BarcodeRepository
-import com.vjh0107.barcode.framework.coroutine.MinecraftMain
 import com.vjh0107.barcode.framework.database.datasource.BarcodeDataSource
 import com.vjh0107.barcode.framework.database.player.PlayerIDWrapper
 import com.vjh0107.barcode.framework.database.player.data.PlayerData
@@ -11,7 +10,9 @@ import com.vjh0107.barcode.framework.database.player.events.BarcodePlayerDataLoa
 import com.vjh0107.barcode.framework.database.player.getPlayer
 import com.vjh0107.barcode.framework.exceptions.playerdata.PlayerDataNotFoundException
 import com.vjh0107.barcode.framework.koin.injector.inject
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
@@ -43,16 +44,11 @@ abstract class AbstractSavablePlayerDataRepository<T : PlayerData>(
     }
 
     final override fun setup(id: PlayerIDWrapper) {
-        CoroutineScope(Dispatchers.MinecraftMain(plugin)).launch {
-            if (!dataMap.containsKey(id)) {
-                val playerData = withContext(Dispatchers.IO) {
-                    val data = loadData(id)
-                    dataMap[id] = data
-                    data
-                }
-                withContext(Dispatchers.MinecraftMain(plugin)) {
-                    Bukkit.getPluginManager().callEvent(BarcodePlayerDataLoadEvent(id.getPlayer(), playerData))
-                }
+        if (!dataMap.containsKey(id)) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val data = loadData(id)
+                dataMap[id] = data
+                Bukkit.getPluginManager().callEvent(BarcodePlayerDataLoadEvent(id.getPlayer(), data))
             }
         }
     }

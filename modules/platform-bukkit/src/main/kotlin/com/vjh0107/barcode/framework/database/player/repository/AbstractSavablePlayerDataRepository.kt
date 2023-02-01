@@ -25,10 +25,10 @@ import java.util.logging.Logger
  */
 abstract class AbstractSavablePlayerDataRepository<T : PlayerData>(
     plugin: AbstractBarcodePlugin
-) : AbstractPlayerDataRepository<T>(plugin), SavablePlayerDataRepository<T>, BarcodeRepository, LoggerProvider {
+) : AbstractPlayerDataRepository<T>(plugin), SavablePlayerDataRepository<T>, LoggerProvider {
     val dataSource: BarcodeDataSource by inject { parametersOf(plugin) }
 
-    final override fun close() {
+    final override fun onClose() {
         dataSource.close()
         getLogger().info("BarcodeDataSource 를 성공적으로 닫았습니다.")
     }
@@ -43,24 +43,20 @@ abstract class AbstractSavablePlayerDataRepository<T : PlayerData>(
         }
     }
 
-    final override fun setup(id: PlayerIDWrapper) {
+    final override suspend fun setup(id: PlayerIDWrapper) {
         if (!dataMap.containsKey(id)) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val data = loadData(id)
-                dataMap[id] = data
-                Bukkit.getPluginManager().callEvent(BarcodePlayerDataLoadEvent(id.getPlayer(), data))
-            }
+            val data = loadData(id)
+            dataMap[id] = data
+            Bukkit.getPluginManager().callEvent(BarcodePlayerDataLoadEvent(id.getPlayer(), data))
         }
     }
 
-    final override fun unregisterSafe(id: PlayerIDWrapper) {
+    final override suspend fun unregisterSafe(id: PlayerIDWrapper) {
         val playerData = getPlayerData(id) ?: throw PlayerDataNotFoundException(id)
         if (dataMap.containsKey(id)) {
-            CoroutineScope(Dispatchers.IO).launch {
-                saveData(id, playerData)
-                playerData.close()
-                this@AbstractSavablePlayerDataRepository.dataMap.remove(id)
-            }
+            saveData(id, playerData)
+            playerData.close()
+            this@AbstractSavablePlayerDataRepository.dataMap.remove(id)
         } else {
             playerData.close()
             this.dataMap.remove(id)

@@ -1,18 +1,20 @@
 package com.vjh0107.barcode.framework.netty
 
 import com.vjh0107.barcode.framework.utils.uncheckedNonnullCast
+import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import io.netty.channel.ChannelPipeline
+import java.nio.charset.Charset
 
 /**
  * kotlin dsl 스러운 방법으로 adapter 를 추가합니다.
  */
 class ChannelPipelineDelegate(val pipeline: ChannelPipeline) : ChannelPipeline by pipeline {
-    fun <T> addChannelReadHandler(handler: (context: ChannelHandlerContext, message: T) -> Unit) {
+    fun addChannelReadHandler(handler: (context: ChannelHandlerContext, message: String) -> Unit) {
         addLast(object : ChannelInboundHandlerAdapter() {
             override fun channelRead(context: ChannelHandlerContext, message: Any) {
-                handler(context, message.uncheckedNonnullCast())
+                handler(context, message.uncheckedNonnullCast<ByteBuf>().toString(Charset.defaultCharset()))
             }
         })
     }

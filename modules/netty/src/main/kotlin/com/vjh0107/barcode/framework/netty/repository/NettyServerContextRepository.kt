@@ -16,6 +16,8 @@ interface NettyServerContextRepository<T : Comparable<*>> {
     fun getRegisteredServerByName(name: String): ChannelHandlerContext
     fun findRegisteredServerByAddress(address: InetSocketAddress): ChannelHandlerContext?
     fun getRegisteredServerByAddress(address: InetSocketAddress): ChannelHandlerContext
+    fun findRegisteredServerByRemoteAddressPort(port: Int): ChannelHandlerContext?
+    fun getRegisteredServerByRemoteAddressPort(port: Int): ChannelHandlerContext
 
     /**
      * context 를 삭제합니다.

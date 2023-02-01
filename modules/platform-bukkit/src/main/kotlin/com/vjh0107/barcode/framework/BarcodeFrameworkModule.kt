@@ -7,10 +7,11 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
+import org.bukkit.Server
 import org.koin.core.annotation.InjectedParam
 import org.koin.dsl.module
+import java.util.logging.Logger
 
 @BarcodeComponent
 class BarcodeFrameworkModule(private val plugin: AbstractBarcodePlugin) : BarcodeKoinModule {
@@ -37,6 +38,7 @@ class BarcodeFrameworkModule(private val plugin: AbstractBarcodePlugin) : Barcod
     override val targetModule = module {
         factory { params -> providePluginNamespacedKey(params.get()) }
         single { provideKtorClient() }
-        single { Bukkit.getLogger() }
+        single<Logger> { plugin.logger }
+        single<Server> { plugin.server }
     }
 }

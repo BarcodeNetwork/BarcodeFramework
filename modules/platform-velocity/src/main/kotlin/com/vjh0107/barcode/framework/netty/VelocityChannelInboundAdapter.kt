@@ -6,6 +6,7 @@ import com.vjh0107.barcode.framework.events.ProxyChannelInboundEvent
 import com.vjh0107.barcode.framework.netty.repository.NettyServerContextRepository
 import com.vjh0107.barcode.framework.proxy.api.ProxyEventData
 import com.vjh0107.barcode.framework.utils.getServerByPort
+import com.vjh0107.barcode.framework.utils.toInetSocketAddress
 import com.vjh0107.barcode.framework.utils.uncheckedNonnullCast
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInitializer
@@ -24,7 +25,7 @@ class VelocityChannelInboundAdapter(
 ) : ChannelInitializer<SocketChannel>() {
     override fun initChannel(socketChannel: SocketChannel) {
         with(ChannelPipelineDelegate(socketChannel.pipeline())) {
-            addChannelReadHandler<String> { context, message ->
+            addChannelReadHandler { context, message ->
                 if (message.startsWith(NettyPredefinedMessages.ACTIVE.message)) {
                     val port = message.removePrefix(NettyPredefinedMessages.ACTIVE.message).toInt()
                     val registeredServer = server.getServerByPort(port)
@@ -34,8 +35,11 @@ class VelocityChannelInboundAdapter(
                     val registeredServer = server.getServerByPort(port)
                     repository.removeContext(registeredServer.serverInfo)
                 } else {
-                    val proxyEventData = ProxyEventData.deserialize(message)
-                    server.eventManager.fire(ProxyChannelInboundEvent(server, context, proxyEventData))
+                    val port = context.channel().remoteAddress().toInetSocketAddress().port
+                    val serverPort = repository.getRegisteredServerByRemoteAddressPort(port).channel().remoteAddress().toInetSocketAddress().port
+                    val registeredServer = server.getServerByPort(serverPort)
+
+                    server.eventManager.fire(ProxyChannelInboundEvent(registeredServer, context, message))
                 }
             }
             addChannelRegisteredHandler { context ->
@@ -43,6 +47,10 @@ class VelocityChannelInboundAdapter(
             }
             addChannelUnregisteredHandler { context ->
                 logger.info("channel from port ${getRemoteAddress(context).port} unregistered")
+            }
+            addExceptionCaughtHandler { context, cause ->
+                cause.printStackTrace()
+                context.close()
             }
         }
     }

@@ -9,6 +9,7 @@ import io.netty.channel.ChannelInitializer
 import io.netty.channel.socket.SocketChannel
 import kotlinx.coroutines.*
 import org.bukkit.Bukkit
+import org.bukkit.Server
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import java.net.InetSocketAddress
@@ -23,13 +24,14 @@ import kotlin.coroutines.CoroutineContext
 @Factory(binds = [ChannelInitializer::class])
 class BukkitChannelInboundAdapter(
     private val service: NettyClientService,
+    private val server: Server,
     private val logger: Logger
 ) : ChannelInitializer<SocketChannel>(), CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     override fun initChannel(channel: SocketChannel) {
         with(ChannelPipelineDelegate(channel.pipeline())) {
-            addChannelReadHandler<String> { context, message ->
+            addChannelReadHandler { context, message ->
                 Bukkit.getPluginManager().callEvent(ProxyChannelOutboundEvent(context, ProxyEventData.deserialize(message)))
             }
             addChannelUnregisteredHandler { context ->
@@ -46,14 +48,14 @@ class BukkitChannelInboundAdapter(
                 logger.info("[BarcodeFramework] connection lost from proxy")
             }
             addChannelInactiveHandler { context ->
-                val connectRequest = NettyPredefinedMessages.INACTIVE.message
+                val connectRequest = NettyPredefinedMessages.INACTIVE.message + server.port
                 val messageBuffer = Unpooled.buffer()
                 messageBuffer.writeBytes(connectRequest.toByteArray())
                 context.writeAndFlush(messageBuffer)
                 logger.info("[BarcodeFramework] disconnected from proxy")
             }
             addChannelActiveHandler { context ->
-                val connectRequest = NettyPredefinedMessages.ACTIVE.message
+                val connectRequest = NettyPredefinedMessages.ACTIVE.message + server.port
                 val messageBuffer = Unpooled.buffer()
                 messageBuffer.writeBytes(connectRequest.toByteArray())
                 context.writeAndFlush(messageBuffer)

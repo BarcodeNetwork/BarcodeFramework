@@ -1,6 +1,6 @@
 package com.vjh0107.barcode.framework.events
 
-import com.vjh0107.barcode.framework.proxy.api.ProxyEventData
+import com.vjh0107.barcode.framework.proxy.api.event.ProxyEventData
 import io.netty.channel.ChannelHandlerContext
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList

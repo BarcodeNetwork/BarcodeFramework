@@ -131,7 +131,7 @@ object Deps {
         }
     }
 
-    object Koin {
+    object Koin : DependencySet<String> {
         private val koinVersion: String by project
         private val koinAnnotationVersion: String by project
         val CORE = "io.insert-koin:koin-core:$koinVersion"
@@ -140,5 +140,9 @@ object Deps {
         val KSP_COMPILER = "io.insert-koin:koin-ksp-compiler:$koinAnnotationVersion"
 
         val TEST = "io.insert-koin:koin-test:$koinVersion"
+
+        override fun getDependencies(): Collection<String> {
+            return setOf(CORE, ANNOTATIONS)
+        }
     }
 }

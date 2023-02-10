@@ -1,7 +1,7 @@
 package com.vjh0107.barcode.framework.netty.service
 
-import com.velocitypowered.api.proxy.server.ServerInfo
-import com.vjh0107.barcode.framework.netty.repository.NettyServerContextRepository
+import com.vjh0107.barcode.framework.netty.repository.VelocityNettyServerContextRepository
+import com.vjh0107.barcode.framework.utils.toInetSocketAddress
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.Unpooled
 import io.netty.channel.*
@@ -20,7 +20,7 @@ import kotlin.coroutines.CoroutineContext
 @Single(binds = [NettyServerService::class])
 class VelocityNettyServerService(
     private val logger: Logger,
-    private val repository: NettyServerContextRepository<ServerInfo>
+    private val repository: VelocityNettyServerContextRepository
 ) : NettyServerService, CoroutineScope {
     private val allChannels: ChannelGroup = DefaultChannelGroup("server", GlobalEventExecutor.INSTANCE)
     private lateinit var parentEventLoopGroup: EventLoopGroup
@@ -64,12 +64,12 @@ class VelocityNettyServerService(
         messageBuffer.writeBytes(data.toByteArray())
         context.writeAndFlush(messageBuffer)
         if (log) {
-            logger.info("message sent: $data")
+            logger.info("message sent to ${context.channel().remoteAddress().toInetSocketAddress().port}: $data")
         }
     }
 
     override fun sendMessage(targetServer: String, data: String, log: Boolean) {
-        val context = repository.findRegisteredServerByName(targetServer)
+        val context = repository.findChannelHandlerContextByName(targetServer)
         if (context != null) {
             sendMessage(context, data, log)
         } else {
@@ -78,10 +78,10 @@ class VelocityNettyServerService(
     }
 
     override fun sendMessageAll(data: String, log: Boolean) {
-        if (repository.getAllRegisteredServers().isEmpty()) {
+        if (repository.getAllChannelHandlerContext().isEmpty()) {
             logger.info("attempting to send messages to servers but no servers have registered yet")
         } else {
-            repository.getAllRegisteredServers().forEach { context ->
+            repository.getAllChannelHandlerContext().forEach { context ->
                 sendMessage(context, data, log)
             }
         }

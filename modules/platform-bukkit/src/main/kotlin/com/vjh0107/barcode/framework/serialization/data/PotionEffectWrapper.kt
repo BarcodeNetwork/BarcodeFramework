@@ -8,14 +8,19 @@ import org.bukkit.potion.PotionEffectType
 
 @Serializable
 data class PotionEffectWrapper(
-    @Serializable(with = PotionEffectTypeSerializer::class) val type: PotionEffectType,
-    val duration: Double,
-    val level: Int
+    val amplifier: Int = 0,
+    val duration: Int = 0,
+    @Serializable(with = PotionEffectTypeSerializer::class) val type: PotionEffectType = PotionEffectType.SPEED,
+    val ambient: Boolean = false,
+    val particles: Boolean = true,
+    val icon: Boolean = true
 ) : SerializableData {
-    /**
-     * 버킷 이펙트로 변환합니다.
-     */
-    fun toEffect(ambient: Boolean = true, particles: Boolean = false): PotionEffect {
-        return PotionEffect(type, (duration * 20).toInt(), level - 1, ambient, particles)
+    companion object {
+        fun of(potionEffect: PotionEffect): PotionEffectWrapper {
+            return PotionEffectWrapper(potionEffect.amplifier, potionEffect.duration, potionEffect.type, potionEffect.isAmbient, potionEffect.hasParticles(), potionEffect.hasIcon())
+        }
+    }
+    fun get(): PotionEffect {
+        return PotionEffect(type, duration, amplifier, ambient, particles, icon)
     }
 }

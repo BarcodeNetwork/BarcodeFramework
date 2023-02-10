@@ -1,4 +1,4 @@
-package com.vjh0107.barcode.framework.proxy.api.event
+package com.vjh0107.barcode.framework.transaction
 
 import com.vjh0107.barcode.framework.component.BarcodeComponent
 import com.vjh0107.barcode.framework.component.BarcodeKoinModule
@@ -7,10 +7,10 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.ksp.generated.module
 
-@BarcodeComponent
 @Module
 @ComponentScan
-class ProxyEventModule : BarcodeKoinModule {
+@BarcodeComponent
+class TransactionModule : BarcodeKoinModule {
     override val targetModule: KoinModule
         get() = module
 }

@@ -9,6 +9,13 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+apply(file(project.projectDir.path + "/exclude.gradle.kts"))
+
+val excludeSet = org.gradle.internal.Cast.uncheckedNonnullCast<List<Pair<String, String>>>(extra["excludeSet"]!!)
+for ((group, module) in excludeSet) {
+    configurations.runtimeClasspath.get().exclude(group, module)
+}
+
 val isExecutingBukkit = false
 
 tasks.shadowJar {
@@ -27,16 +34,30 @@ barcodeTasks {
         name = "BarcodeFramework"
         apiVersion = "1.19"
         author = "vjh0107"
+        version = "${project.version}, ${extra["humanReadableNow"]}"
         softDepend = listOf(
             "Vault",
             "HolographicDisplays",
             "PlaceholderAPI"
         )
+        libraries = mutableListOf(
+            Deps.Kotlin.KOTLIN,
+            Deps.Kotlin.KOTLIN_REFLECT,
+            Deps.KotlinX.Coroutines.CORE,
+            Deps.KotlinX.Serialization.JSON,
+            Deps.Koin.CORE,
+            Deps.Koin.ANNOTATIONS,
+            Deps.Library.HIKARICP
+        ).apply {
+            addAll(Deps.EXPOSED.getDependencies())
+            addAll(Deps.Ktor.CLIENT.getDependencies())
+            addAll(Deps.GOOGLE_SHEETS.getDependencies())
+        }
     }
     specialSource {
         version.set("1.19.2")
         archiveTask.set(tasks.shadowJar)
-        enabled.set(false)
+        enabled.set(true)
     }
     bukkitExecutor {
         enabled.set(isExecutingBukkit)
@@ -53,6 +74,7 @@ dependencies {
     compileOnly(Deps.Minecraft.AUTH_LIB)
     compileOnly(Deps.Minecraft.Plugin.VAULT)
     compileOnly(Deps.Minecraft.Plugin.PAPI)
+    compileOnly(Deps.Library.MYSQL_CONNECTOR)
 
     api(Deps.Minecraft.Plugin.COMMAND_API)
     api(Deps.KotlinX.Coroutines.CORE)
@@ -62,10 +84,8 @@ dependencies {
     api(Deps.Koin.CORE)
     api(Deps.Koin.ANNOTATIONS)
     ksp(Deps.Koin.KSP_COMPILER)
-    api(Deps.Library.KOTLIN_REFLECT)
-    api(Deps.Library.MYSQL_CONNECTOR)
+    api(Deps.Kotlin.KOTLIN_REFLECT)
     api(Deps.Library.HIKARICP)
-    api(Deps.Library.SQLITE)
 
     apiModule(Modules.KOIN)
     apiModule(Modules.DATABASE)

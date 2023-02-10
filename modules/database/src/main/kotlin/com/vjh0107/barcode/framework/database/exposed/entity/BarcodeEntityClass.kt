@@ -6,7 +6,7 @@ import com.vjh0107.barcode.framework.database.player.PlayerIDWrapper
 import com.vjh0107.barcode.framework.database.player.multiprofile.ProfileID
 import org.jetbrains.exposed.dao.IntEntityClass
 
-abstract class BarcodeEntityClass<out E : BarcodePlayerEntity>(
+abstract class BarcodeEntityClass<out E : BarcodePlayerEntity<*>>(
     private val barcodeTable: BarcodeIDTable,
     entityType: Class<E>? = null
 ) : IntEntityClass<E>(barcodeTable, entityType) {

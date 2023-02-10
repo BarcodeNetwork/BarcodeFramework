@@ -15,7 +15,7 @@ dependencies {
     api(Deps.Koin.CORE)
     api(Deps.Koin.ANNOTATIONS)
     ksp(Deps.Koin.KSP_COMPILER)
-    api(Deps.Library.KOTLIN_REFLECT)
+    api(Deps.Kotlin.KOTLIN_REFLECT)
 
     apiModule(Modules.COMMON)
     apiModule(Modules.KOIN)

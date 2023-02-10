@@ -11,5 +11,6 @@ subprojects {
         mavenLocal()
         maven("https://jitpack.io")
         maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 }

@@ -10,12 +10,18 @@ import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
+import java.io.File
 
 /**
  * MavenCentral 에 publish 해주는 플러그인 입니다.
  */
 class ModulePublisherPlugin : Plugin<Project> {
     override fun apply(target: Project) {
+        File(target.rootProject.projectDir.path + "/publish.gradle.kts").let {
+            if (!it.exists()) {
+                return
+            }
+        }
         with(target) {
             init(this)
             val javadocJar by tasks.registering(Jar::class) {

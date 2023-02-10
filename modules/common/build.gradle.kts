@@ -5,6 +5,6 @@ plugins {
 
 dependencies {
     api(Deps.KotlinX.Serialization.JSON)
-    api(Deps.Library.KOTLIN_REFLECT)
+    api(Deps.Kotlin.KOTLIN_REFLECT)
     testImplementationAll(Deps.KOTEST)
 }

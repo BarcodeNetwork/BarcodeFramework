@@ -2,7 +2,7 @@ package com.vjh0107.barcode.framework.netty
 
 import com.vjh0107.barcode.framework.events.ProxyChannelOutboundEvent
 import com.vjh0107.barcode.framework.netty.service.NettyClientService
-import com.vjh0107.barcode.framework.proxy.api.ProxyEventData
+import com.vjh0107.barcode.framework.proxy.api.event.ProxyEventData
 import com.vjh0107.barcode.framework.utils.uncheckedNonnullCast
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelInitializer
@@ -13,13 +13,9 @@ import org.bukkit.Server
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import java.net.InetSocketAddress
-import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
 import kotlin.coroutines.CoroutineContext
 
-/**
- * channel 이 active 될 때, proxy 서버에
- */
 @Named("bukkitchannelinboundadapter")
 @Factory(binds = [ChannelInitializer::class])
 class BukkitChannelInboundAdapter(
@@ -32,6 +28,7 @@ class BukkitChannelInboundAdapter(
     override fun initChannel(channel: SocketChannel) {
         with(ChannelPipelineDelegate(channel.pipeline())) {
             addChannelReadHandler { context, message ->
+                logger.info("message received: $message")
                 Bukkit.getPluginManager().callEvent(ProxyChannelOutboundEvent(context, ProxyEventData.deserialize(message)))
             }
             addChannelUnregisteredHandler { context ->
@@ -60,7 +57,7 @@ class BukkitChannelInboundAdapter(
                 messageBuffer.writeBytes(connectRequest.toByteArray())
                 context.writeAndFlush(messageBuffer)
                 service.setContext(context)
-                logger.info("[BarcodeFramework] connected to proxy")
+                logger.info("connected to proxy")
             }
             addExceptionCaughtHandler { context, cause ->
                 cause.printStackTrace()

@@ -1,11 +1,11 @@
-package com.vjh0107.barcode.framework.database.player.events
+package com.vjh0107.barcode.framework.proxy.events
 
-import com.vjh0107.barcode.framework.database.player.data.PlayerData
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 
-class BarcodePlayerDataLoadEvent(player: Player, val playerData: PlayerData) : PlayerEvent(player, true) {
+class BarcodeRepositorySaveEvent(player: Player) : PlayerEvent(player, !Bukkit.isPrimaryThread()) {
     companion object {
         @JvmStatic
         private val handlers: HandlerList = HandlerList()

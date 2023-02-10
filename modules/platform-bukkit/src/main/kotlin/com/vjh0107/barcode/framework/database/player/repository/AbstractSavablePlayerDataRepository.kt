@@ -2,11 +2,10 @@ package com.vjh0107.barcode.framework.database.player.repository
 
 import com.vjh0107.barcode.framework.AbstractBarcodePlugin
 import com.vjh0107.barcode.framework.LoggerProvider
-import com.vjh0107.barcode.framework.component.BarcodeRepository
 import com.vjh0107.barcode.framework.database.datasource.BarcodeDataSource
 import com.vjh0107.barcode.framework.database.player.PlayerIDWrapper
 import com.vjh0107.barcode.framework.database.player.data.PlayerData
-import com.vjh0107.barcode.framework.database.player.events.BarcodePlayerDataLoadEvent
+import com.vjh0107.barcode.framework.database.player.events.BarcodeRepositoryDataLoadEvent
 import com.vjh0107.barcode.framework.database.player.getPlayer
 import com.vjh0107.barcode.framework.exceptions.playerdata.PlayerDataNotFoundException
 import com.vjh0107.barcode.framework.koin.injector.inject
@@ -35,10 +34,10 @@ abstract class AbstractSavablePlayerDataRepository<T : PlayerData>(
 
     abstract fun getTablesToLoad(): List<Table>
 
-    final override fun load() {
+    final override fun onLoad() {
         CoroutineScope(Dispatchers.IO).launch {
             dataSource.query {
-                SchemaUtils.createMissingTablesAndColumns(*getTablesToLoad().toTypedArray())
+                SchemaUtils.createMissingTablesAndColumns(*getTablesToLoad().toTypedArray(), withLogs = false)
             }
         }
     }
@@ -47,7 +46,7 @@ abstract class AbstractSavablePlayerDataRepository<T : PlayerData>(
         if (!dataMap.containsKey(id)) {
             val data = loadData(id)
             dataMap[id] = data
-            Bukkit.getPluginManager().callEvent(BarcodePlayerDataLoadEvent(id.getPlayer(), data))
+            Bukkit.getPluginManager().callEvent(BarcodeRepositoryDataLoadEvent(id.getPlayer(), data))
         }
     }
 

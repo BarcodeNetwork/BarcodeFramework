@@ -1,10 +1,9 @@
 package com.vjh0107.barcode.framework.netty
 
 import com.velocitypowered.api.proxy.ProxyServer
-import com.velocitypowered.api.proxy.server.ServerInfo
 import com.vjh0107.barcode.framework.events.ProxyChannelInboundEvent
-import com.vjh0107.barcode.framework.netty.repository.NettyServerContextRepository
-import com.vjh0107.barcode.framework.proxy.api.ProxyEventData
+import com.vjh0107.barcode.framework.netty.repository.VelocityNettyServerContextRepository
+import com.vjh0107.barcode.framework.proxy.api.event.ProxyEventData
 import com.vjh0107.barcode.framework.utils.getServerByPort
 import com.vjh0107.barcode.framework.utils.toInetSocketAddress
 import com.vjh0107.barcode.framework.utils.uncheckedNonnullCast
@@ -21,7 +20,7 @@ import java.net.InetSocketAddress
 class VelocityChannelInboundAdapter(
     private val server: ProxyServer,
     private val logger: Logger,
-    private val repository: NettyServerContextRepository<ServerInfo>
+    private val repository: VelocityNettyServerContextRepository
 ) : ChannelInitializer<SocketChannel>() {
     override fun initChannel(socketChannel: SocketChannel) {
         with(ChannelPipelineDelegate(socketChannel.pipeline())) {
@@ -36,10 +35,10 @@ class VelocityChannelInboundAdapter(
                     repository.removeContext(registeredServer.serverInfo)
                 } else {
                     val port = context.channel().remoteAddress().toInetSocketAddress().port
-                    val serverPort = repository.getRegisteredServerByRemoteAddressPort(port).channel().remoteAddress().toInetSocketAddress().port
+                    val serverPort = repository.getRegisteredServerPortByChannelHandlerPort(port)
                     val registeredServer = server.getServerByPort(serverPort)
-
-                    server.eventManager.fire(ProxyChannelInboundEvent(registeredServer, context, message))
+                    val eventData = ProxyEventData.deserialize(message)
+                    server.eventManager.fire(ProxyChannelInboundEvent(registeredServer, context, eventData))
                 }
             }
             addChannelRegisteredHandler { context ->

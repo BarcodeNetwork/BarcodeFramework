@@ -2,3 +2,5 @@ ignoringInfoMessages: false
 netty:
   host: localhost
   port: 30107
+
+player-transaction-timeout: 1000

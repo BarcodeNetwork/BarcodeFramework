@@ -58,3 +58,7 @@ private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss
 fun LocalDateTime.toBarcodeFormat() : String {
     return this.format(dateTimeFormatter)
 }
+
+fun String.consoleMessageColorify(): String {
+    return "\u001B[33m$this\u001B[0m"
+}

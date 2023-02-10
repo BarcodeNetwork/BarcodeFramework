@@ -1,0 +1,21 @@
+extra["excludeSet"] = listOf(
+    "org.jetbrains.kotlin" to "kotlin-stdlib-jdk8",
+    "org.jetbrains.kotlin" to "kotlin-reflect",
+    "org.jetbrains.kotlinx" to "kotlinx-coroutines-core",
+    "org.jetbrains.kotlinx" to "kotlinx-serialization-json",
+    "org.jetbrains.exposed" to "exposed-core",
+    "org.jetbrains.exposed" to "exposed-dao",
+    "org.jetbrains.exposed" to "exposed-java-time",
+    "org.jetbrains.exposed" to "exposed-jdbc",
+    "io.insert-koin" to "koin-core-jvm",
+    "io.insert-koin" to "koin-annotations-jvm",
+    "io.ktor" to "ktor-client-cio-jvm",
+    "io.ktor" to "ktor-client-content-negotiation-jvm",
+    "io.ktor" to "ktor-client-core-jvm",
+    "io.ktor" to "ktor-serialization-kotlinx-json-jvm",
+    "com.zaxxer" to "HikariCP",
+    "com.google.api-client" to "google-api-client",
+    "com.google.apis" to "google-api-services-sheets",
+    "com.google.auth" to "google-auth-library-oauth2-http",
+    "com.google.oauth-client" to "google-oauth-client-jetty"
+)

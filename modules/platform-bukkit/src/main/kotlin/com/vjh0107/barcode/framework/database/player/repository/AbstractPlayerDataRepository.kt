@@ -23,12 +23,15 @@ abstract class AbstractPlayerDataRepository<T : PlayerData>(
 ) : PlayerDataRepository<T>, BarcodeRepository, Listener, CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    init {
+    protected val dataMap: MutableMap<PlayerIDWrapper, T> = Collections.synchronizedMap(HashMap())
+
+    open fun onLoad() {}
+
+    final override fun load() {
         plugin.registerListener(this)
         registerRepository(this)
+        onLoad()
     }
-
-    protected val dataMap: MutableMap<PlayerIDWrapper, T> = Collections.synchronizedMap(HashMap())
 
     override fun getPlayerData(playerID: PlayerIDWrapper): T? {
         return dataMap[playerID]
@@ -48,6 +51,9 @@ abstract class AbstractPlayerDataRepository<T : PlayerData>(
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onQuit(event: PlayerQuitEvent) {
+        if (this is ProxySafePlayerDataRepository<*>) {
+            return
+        }
         val id = PlayerIDFactory.getPlayerID(event.player)
         launch {
             unregisterSafe(id)
@@ -65,9 +71,10 @@ abstract class AbstractPlayerDataRepository<T : PlayerData>(
         private val repositories: MutableList<PlayerDataRepository<out PlayerData>> = mutableListOf()
         private val saveFinishedRepositories: MutableMap<PlayerIDWrapper, Int> = Collections.synchronizedMap(HashMap())
 
+        @Synchronized
         override fun isFinallySaveCompleted(id: PlayerIDWrapper): Boolean {
             addFinishedRepositoryCount(id)
-            return if (repositories.size == saveFinishedRepositories.size) {
+            return if (repositories.size == saveFinishedRepositories[id]) {
                 flushFinishedRepositoryCount(id)
                 true
             } else {

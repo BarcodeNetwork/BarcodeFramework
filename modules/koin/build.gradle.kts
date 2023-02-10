@@ -9,7 +9,7 @@ dependencies {
     apiModule(Modules.COMMON)
     api(Deps.Koin.CORE)
     api(Deps.Koin.ANNOTATIONS)
-    api(Deps.Library.KOTLIN_REFLECT)
+    api(Deps.Kotlin.KOTLIN_REFLECT)
 
     testImplementation(Deps.Koin.TEST)
     testImplementation(Deps.KotlinX.Coroutines.TEST)

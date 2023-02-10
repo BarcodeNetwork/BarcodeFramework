@@ -17,9 +17,9 @@ buildSpigotIfMissing() {
   fi
 }
 
-#buildSpigotIfMissing 1.18.2 remapped
-buildSpigotIfMissing 1.18.2
-
-buildSpigotIfMissing 1.19.2 remapped
-buildSpigotIfMissing 1.19.2
+buildSpigotIfMissing 1.8.8
+buildSpigotIfMissing 1.9.4
+buildSpigotIfMissing 1.12
+buildSpigotIfMissing 1.16.1
+buildSpigotIfMissing 1.16.5
 popd

@@ -10,7 +10,7 @@ class NMSModule {
     @Single(binds = [NMSService::class])
     fun provideNMSWrapper(): NMSService {
         val nmsWrapper = try {
-            Class.forName("com.vjh0107.barcode.framework.nms.impl.NMSWrapper_${getNMSVersion()}")
+            Class.forName("com.vjh0107.barcode.framework.nms.impl.NMSService_${getNMSVersion()}")
         } catch (exception: ClassNotFoundException) {
             Bukkit.getLogger().severe("버전에 맞는 NMSWrapper 가 없습니다: ${getNMSVersion()}")
             throw exception

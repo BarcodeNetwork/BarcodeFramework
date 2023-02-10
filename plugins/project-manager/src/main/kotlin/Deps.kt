@@ -5,6 +5,12 @@ object Deps {
     private val project = ProjectManagerPlugin.project
 
     val kotlinVersion: String by project
+
+    object Kotlin {
+        val KOTLIN = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    }
+
     object Minecraft {
         private const val version = "1.19.2-R0.1-SNAPSHOT"
 
@@ -35,7 +41,6 @@ object Deps {
     }
 
     object Library {
-        val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         val KOTLIN_TEST = "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
         const val MYSQL_CONNECTOR = "mysql:mysql-connector-java:8.0.28"
         const val HIKARICP = "com.zaxxer:HikariCP:5.0.1"
@@ -57,12 +62,12 @@ object Deps {
 
     object Ktor {
         private val ktorVersion: String by project
-        private val SERIALIZATION_JSON = "io.ktor:ktor-serialization-kotlinx-json:$ktorVersion"
+        private val SERIALIZATION_JSON = "io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion"
 
         object CLIENT : DependencySet<String> {
-            private val CORE = "io.ktor:ktor-client-core:$ktorVersion"
-            private val COROUTINES_IO = "io.ktor:ktor-client-cio:$ktorVersion"
-            private val CONTENT_NEGOTIATION = "io.ktor:ktor-client-content-negotiation:$ktorVersion"
+            val CORE = "io.ktor:ktor-client-core-jvm:$ktorVersion"
+            val COROUTINES_IO = "io.ktor:ktor-client-cio-jvm:$ktorVersion"
+            val CONTENT_NEGOTIATION = "io.ktor:ktor-client-content-negotiation-jvm:$ktorVersion"
 
             override fun getDependencies(): Collection<String> {
                 return setOf(CORE, COROUTINES_IO, CONTENT_NEGOTIATION, SERIALIZATION_JSON)
@@ -134,9 +139,9 @@ object Deps {
     object Koin : DependencySet<String> {
         private val koinVersion: String by project
         private val koinAnnotationVersion: String by project
-        val CORE = "io.insert-koin:koin-core:$koinVersion"
+        val CORE = "io.insert-koin:koin-core-jvm:$koinVersion"
         val KTOR = "io.insert-koin:koin-ktor:$koinVersion"
-        val ANNOTATIONS = "io.insert-koin:koin-annotations:$koinAnnotationVersion"
+        val ANNOTATIONS = "io.insert-koin:koin-annotations-jvm:$koinAnnotationVersion"
         val KSP_COMPILER = "io.insert-koin:koin-ksp-compiler:$koinAnnotationVersion"
 
         val TEST = "io.insert-koin:koin-test:$koinVersion"

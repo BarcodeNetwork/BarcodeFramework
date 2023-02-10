@@ -2,3 +2,6 @@ netty:
   enabled: false
   host: localhost
   port: 30107
+
+debug:
+  version-announcer: false

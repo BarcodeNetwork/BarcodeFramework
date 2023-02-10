@@ -6,11 +6,8 @@ import kotlinx.serialization.Serializable
 import org.koin.core.annotation.Factory
 import java.util.*
 
-@Factory(binds = [ProxyClientCallEvent::class])
 @Serializable
 data class BarcodeRepositorySaveFinishedEvent(
     @Serializable(with = UUIDSerializer::class) val minecraftPlayerUUID: UUID,
     override val serverPort: Int
-) : ProxyClientCallEvent() {
-    override val eventName = "BarcodeRepositorySaveFinishedEvent"
-}
+) : ProxyClientCallEvent

@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
@@ -34,5 +35,13 @@ class NMSService_v1_19_R1 : NMSService {
         lightning.moveTo(location.x, location.y, location.z, location.yaw, location.pitch)
         val craftPlayer = player.uncheckedNonnullCast<CraftPlayer>()
         craftPlayer.handle.connection.send(ClientboundAddEntityPacket(lightning))
+    }
+
+    override fun getAllCooldowns(player: Player): Map<Material, Int> {
+        val serverPlayer = player.uncheckedNonnullCast<CraftPlayer>().handle
+        val tickCount = serverPlayer.cooldowns.tickCount
+        return serverPlayer.cooldowns.cooldowns.map {
+            Material.matchMaterial(it.key.defaultInstance.displayName.string)!! to (it.value.endTime - tickCount)
+        }.toMap()
     }
 }

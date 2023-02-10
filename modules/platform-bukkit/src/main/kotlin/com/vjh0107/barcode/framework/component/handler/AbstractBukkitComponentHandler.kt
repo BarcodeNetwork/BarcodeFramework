@@ -5,7 +5,10 @@ import com.vjh0107.barcode.framework.component.IBarcodeComponent
 import com.vjh0107.barcode.framework.injection.instance.injector.InjectorFactory
 import com.vjh0107.barcode.framework.koin.bean.BarcodeBeanModuleFactory
 import com.vjh0107.barcode.framework.koin.injector.ReflectionInjector
+import org.bukkit.Server
+import org.bukkit.configuration.ConfigurationSection
 import java.util.jar.JarFile
+import java.util.logging.Logger
 import kotlin.reflect.KClass
 
 abstract class AbstractBukkitComponentHandler<P : AbstractBarcodePlugin, T : IBarcodeComponent>(
@@ -33,7 +36,12 @@ abstract class AbstractBukkitComponentHandler<P : AbstractBarcodePlugin, T : IBa
     }
 
     override fun createInstance(clazz: KClass<T>): T {
-        val provideInstance: Map<KClass<*>, *> = mapOf(Pair(plugin::class, plugin))
+        val provideInstance: Map<KClass<*>, *> = mapOf(
+            plugin::class to plugin,
+            Server::class to plugin.server,
+            Logger::class to plugin.logger,
+            ConfigurationSection::class to plugin.config
+        )
         val instance = ReflectionInjector.createInstance(clazz, provideInstance)
         BarcodeBeanModuleFactory.tryCreateBeanModule(clazz, instance)
         return instance

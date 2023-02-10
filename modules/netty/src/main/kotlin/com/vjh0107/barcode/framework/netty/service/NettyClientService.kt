@@ -26,9 +26,14 @@ interface NettyClientService : Closeable {
     fun sendMessage(data: String)
 
     /**
-     * 메시지를 보낼 handler context 를 설정한다.
+     * 메시지를 보낼 handler context 를 설정합니다.
      */
     fun setContext(context: ChannelHandlerContext)
+
+    /**
+     * context 를 구합니다.
+     */
+    fun getContext(): ChannelHandlerContext?
 
     override fun close()
 }

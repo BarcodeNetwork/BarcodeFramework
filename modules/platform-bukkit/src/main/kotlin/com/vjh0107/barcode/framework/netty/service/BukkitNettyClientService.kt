@@ -50,13 +50,17 @@ class BukkitNettyClientService(
         this.context = context
     }
 
+    override fun getContext(): ChannelHandlerContext? {
+        return context
+    }
+
     override fun sendMessage(data: String) {
         if (this.context != null) {
             val messageBuffer = Unpooled.buffer()
             messageBuffer.writeBytes(data.toByteArray())
             this.context!!.writeAndFlush(messageBuffer)
         } else {
-            logger.log(Level.WARNING, "[SocketFramework] channel not yet activate.")
+            logger.log(Level.WARNING, "channel not yet activate.")
         }
     }
 
